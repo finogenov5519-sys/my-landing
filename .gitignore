@@ -1,0 +1,5 @@
+# локальные настройки Claude Code
+.claude/settings.local.json
+
+# скриншоты из браузерных проверок
+.playwright-mcp/

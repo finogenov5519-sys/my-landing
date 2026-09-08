@@ -1,0 +1,365 @@
+/* ==========================================================================
+   Эдуард Финогенов — сварщик металлоконструкций
+   Тёмный индустриальный стиль. Мобильные — база, десктоп — один медиазапрос
+   в самом низу файла.
+   ========================================================================== */
+
+:root {
+  --bg:        #111213;
+  --surface:   #1b1c1e;
+  --line:      #2c2e31;
+  --text:      #ececec;
+  --muted:     #9a9da1;
+  --accent:    #ff7a1a;
+  --accent-lt: #ff9440;
+  --accent-dk: #e2540c;
+
+  --wrap:  1080px;
+  --pad:   20px;
+  --radius: 4px;
+}
+
+/* --- база ---------------------------------------------------------------- */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  /* якорь не прячется под верхнюю кромку экрана */
+  scroll-padding-top: 24px;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+  /* страховка от горизонтальной прокрутки на узких экранах */
+  overflow-x: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a { color: var(--accent); }
+
+a:focus-visible,
+.btn:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+h1, h2, h3 {
+  line-height: 1.15;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+p { margin: 0; }
+
+.wrap {
+  width: 100%;
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 0 var(--pad);
+}
+
+/* --- кнопки -------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;              /* удобно нажать пальцем */
+  padding: 18px 38px;
+  border-radius: var(--radius);
+  font-size: 19px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease,
+              box-shadow .15s ease;
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: #150e06;
+  border: 2px solid var(--accent);
+  /* тень-подсветка отрывает кнопку от тёмного фона */
+  box-shadow: 0 10px 34px rgba(255, 122, 26, .34);
+}
+
+.btn--primary:hover {
+  background: var(--accent-lt);
+  border-color: var(--accent-lt);
+  box-shadow: 0 12px 40px rgba(255, 122, 26, .48);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text);
+  border: 2px solid var(--line);
+}
+
+.btn--ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+/* --- первый экран -------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  background:
+    radial-gradient(90% 70% at 15% 0%, rgba(255, 106, 26, .16), transparent 60%),
+    linear-gradient(#171819, var(--bg));
+  border-bottom: 1px solid var(--line);
+}
+
+.hero__inner {
+  min-height: 92vh;
+  min-height: 92svh;             /* без «прыжка» из-за адресной строки в мобильном браузере */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 64px;
+  padding-bottom: 64px;
+}
+
+.hero__eyebrow {
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-bottom: clamp(28px, 6vw, 40px);
+}
+
+.hero__title {
+  font-size: clamp(46px, 12vw, 104px);
+  font-weight: 800;
+  line-height: 1.03;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  margin-bottom: clamp(28px, 5vw, 40px);
+}
+
+.hero__lead {
+  max-width: 32ch;
+  font-size: clamp(19px, 4.4vw, 26px);
+  color: #cfd1d3;
+  margin-bottom: clamp(44px, 8vw, 64px);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.hero__actions .btn { flex: 1 1 auto; }
+
+/* --- секции -------------------------------------------------------------- */
+
+.section { padding: 72px 0; }
+
+.section--alt {
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.section__title {
+  font-size: clamp(28px, 6vw, 40px);
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.section__lead {
+  max-width: 56ch;
+  color: var(--muted);
+  margin-bottom: 32px;
+}
+
+/* --- обо мне ------------------------------------------------------------- */
+
+.about {
+  display: grid;
+  gap: 32px;
+}
+
+.about__photo {
+  background: #232527;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+}
+
+.about__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about__text p + p { margin-top: 16px; }
+
+.about__text p { color: #c8cacc; }
+
+/* --- что я делаю --------------------------------------------------------- */
+
+.cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 18px;
+}
+
+.card {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 26px 24px;
+}
+
+.card__title {
+  font-size: 21px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.card__text { color: var(--muted); }
+
+/* --- примеры работ ------------------------------------------------------- */
+
+.works {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 20px;
+}
+
+.work__frame {
+  background: #232527;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+}
+
+.work__frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* пока файла нет — видно подпись alt на сером фоне, а не пустоту */
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.work__caption {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+/* --- контакты ------------------------------------------------------------ */
+
+.phone {
+  display: inline-block;
+  font-size: clamp(30px, 8vw, 48px);
+  font-weight: 800;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+  /* длинный номер не должен ломать вёрстку на 320 px */
+  overflow-wrap: anywhere;
+}
+
+.phone:hover { color: var(--accent); }
+
+.contacts__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.contacts__actions .btn { flex: 1 1 auto; }
+
+.facts {
+  margin: 0;
+  display: grid;
+  gap: 18px;
+  border-top: 1px solid var(--line);
+  padding-top: 26px;
+}
+
+.fact__key {
+  color: var(--muted);
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 4px;
+}
+
+.fact__val {
+  margin: 0;
+  font-size: 18px;
+}
+
+/* --- подвал -------------------------------------------------------------- */
+
+.footer {
+  padding: 28px 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  justify-content: space-between;
+}
+
+/* --- десктоп ------------------------------------------------------------- */
+
+@media (min-width: 720px) {
+  .section { padding: 96px 0; }
+
+  .hero__actions,
+  .contacts__actions { gap: 16px; }
+
+  .hero__actions .btn,
+  .contacts__actions .btn { flex: 0 0 auto; }
+
+  .about {
+    grid-template-columns: 380px 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .cards { grid-template-columns: repeat(3, 1fr); gap: 22px; }
+
+  .works { grid-template-columns: repeat(2, 1fr); }
+
+  .facts { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+}
+
+@media (min-width: 1000px) {
+  .works { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+}
+
+/* уважаем системную настройку «меньше движения» */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}
