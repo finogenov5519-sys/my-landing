@@ -1,22 +1,27 @@
 /* ==========================================================================
-   Эдуард Финогенов — сварщик металлоконструкций
-   Тёмный индустриальный стиль. Мобильные — база, десктоп — один медиазапрос
+   Эдуард Финогенов — сварка металлоконструкций
+   Тёмный минимализм. Мобильные — база, десктоп — один медиазапрос
    в самом низу файла.
    ========================================================================== */
 
 :root {
-  --bg:        #111213;
-  --surface:   #1b1c1e;
-  --line:      #2c2e31;
-  --text:      #ececec;
-  --muted:     #9a9da1;
-  --accent:    #ff7a1a;
-  --accent-lt: #ff9440;
-  --accent-dk: #e2540c;
+  --bg:     #121212;
+  --text:   #F2F0EA;
+  --muted:  #8C8983;
+  --accent: #C8F04A;
+  --line:   #2A2A28;
 
-  --wrap:  1080px;
-  --pad:   20px;
-  --radius: 4px;
+  --font-head: "Unbounded", system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-body: "Inter", system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+
+  --wrap: 1160px;
+  --edge: clamp(20px, 5vw, 72px);
+
+  /* на 375 px и шире — те же 32px, на 320 px ужимается, иначе длинное
+     слово «десятилетиями» не влезает в строку */
+  --h1: clamp(27px, 8.6vw, 32px);
+  --h2: 24px;
+  --h3: 18px;
 }
 
 /* --- база ---------------------------------------------------------------- */
@@ -27,20 +32,41 @@
 
 html {
   scroll-behavior: smooth;
-  /* якорь не прячется под верхнюю кромку экрана */
   scroll-padding-top: 24px;
+  background: var(--bg);
 }
 
 body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, "Segoe UI", Roboto, Arial, sans-serif;
-  font-size: 17px;
+  font-family: var(--font-body);
+  font-size: 15px;
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
   /* страховка от горизонтальной прокрутки на узких экранах */
   overflow-x: hidden;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-head);
+  font-weight: 400;
+  margin: 0;
+  letter-spacing: -.03em;
+}
+
+h1 { font-size: var(--h1); line-height: 1.1; }
+h2 { font-size: var(--h2); line-height: 1.2; }
+h3 { font-size: var(--h3); line-height: 1.3; }
+
+p { margin: 0; }
+
+a { color: inherit; text-decoration: none; }
+
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
 img {
@@ -49,27 +75,29 @@ img {
   height: auto;
 }
 
-a { color: var(--accent); }
-
-a:focus-visible,
-.btn:focus-visible {
-  outline: 3px solid var(--accent);
-  outline-offset: 3px;
-}
-
-h1, h2, h3 {
-  line-height: 1.15;
-  margin: 0;
-  letter-spacing: -0.01em;
-}
-
-p { margin: 0; }
-
 .wrap {
   width: 100%;
   max-width: var(--wrap);
   margin: 0 auto;
-  padding: 0 var(--pad);
+  padding: 0 var(--edge);
+}
+
+.muted { color: var(--muted); }
+
+.kicker {
+  display: block;
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
+.rule {
+  height: 1px;
+  border: 0;
+  margin: 0;
+  background: var(--line);
 }
 
 /* --- кнопки -------------------------------------------------------------- */
@@ -78,284 +106,389 @@ p { margin: 0; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 60px;              /* удобно нажать пальцем */
-  padding: 18px 38px;
-  border-radius: var(--radius);
-  font-size: 19px;
-  font-weight: 700;
-  text-decoration: none;
-  transition: background-color .15s ease, border-color .15s ease, color .15s ease,
-              box-shadow .15s ease;
-}
-
-.btn--primary {
-  background: var(--accent);
-  color: #150e06;
-  border: 2px solid var(--accent);
-  /* тень-подсветка отрывает кнопку от тёмного фона */
-  box-shadow: 0 10px 34px rgba(255, 122, 26, .34);
-}
-
-.btn--primary:hover {
-  background: var(--accent-lt);
-  border-color: var(--accent-lt);
-  box-shadow: 0 12px 40px rgba(255, 122, 26, .48);
-}
-
-.btn--ghost {
-  background: transparent;
+  gap: 8px;
+  min-height: 56px;              /* удобно нажать пальцем */
+  padding: 16px 26px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
   color: var(--text);
-  border: 2px solid var(--line);
+  font-size: 16px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: border-color .18s ease, color .18s ease;
 }
 
-.btn--ghost:hover { border-color: var(--accent); color: var(--accent); }
+.btn:hover { border-color: var(--accent); }
+
+.btn-quiet { color: var(--muted); }
+.btn-quiet:hover { color: var(--text); }
+
+.btn-call {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #121212;
+  font-size: 17px;
+  min-height: 60px;
+}
+
+/* --- шапка --------------------------------------------------------------- */
+
+nav.top { padding: 18px 0; }
+
+nav.top .wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 107px;
+  height: 56px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  font-family: var(--font-head);
+  font-weight: 400;
+  font-size: 20px;
+  letter-spacing: -.02em;
+}
+
+.logo b {
+  color: var(--accent);
+  font-weight: 400;
+}
 
 /* --- первый экран -------------------------------------------------------- */
 
-.hero {
-  position: relative;
-  background:
-    radial-gradient(90% 70% at 15% 0%, rgba(255, 106, 26, .16), transparent 60%),
-    linear-gradient(#171819, var(--bg));
-  border-bottom: 1px solid var(--line);
-}
+.hero { padding: 24px 0 40px; }
 
-.hero__inner {
-  min-height: 92vh;
-  min-height: 92svh;             /* без «прыжка» из-за адресной строки в мобильном браузере */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-top: 64px;
-  padding-bottom: 64px;
-}
+.hero h1 { max-width: 16ch; }
 
-.hero__eyebrow {
-  color: var(--accent);
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  margin-bottom: clamp(28px, 6vw, 40px);
-}
-
-.hero__title {
-  font-size: clamp(46px, 12vw, 104px);
-  font-weight: 800;
-  line-height: 1.03;
-  letter-spacing: -0.025em;
-  text-transform: uppercase;
-  margin-bottom: clamp(28px, 5vw, 40px);
-}
-
-.hero__lead {
-  max-width: 32ch;
-  font-size: clamp(19px, 4.4vw, 26px);
-  color: #cfd1d3;
-  margin-bottom: clamp(44px, 8vw, 64px);
-}
-
-.hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-}
-
-.hero__actions .btn { flex: 1 1 auto; }
-
-/* --- секции -------------------------------------------------------------- */
-
-.section { padding: 72px 0; }
-
-.section--alt {
-  background: var(--surface);
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-
-.section__title {
-  font-size: clamp(28px, 6vw, 40px);
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-
-.section__lead {
-  max-width: 56ch;
-  color: var(--muted);
-  margin-bottom: 32px;
-}
-
-/* --- обо мне ------------------------------------------------------------- */
-
-.about {
-  display: grid;
-  gap: 32px;
-}
-
-.about__photo {
-  background: #232527;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  overflow: hidden;
-  aspect-ratio: 4 / 5;
-}
-
-.about__photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.about__text p + p { margin-top: 16px; }
-
-.about__text p { color: #c8cacc; }
-
-/* --- что я делаю --------------------------------------------------------- */
-
-.cards {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 18px;
-}
-
-.card {
-  background: var(--bg);
-  border: 1px solid var(--line);
-  border-left: 3px solid var(--accent);
-  border-radius: var(--radius);
-  padding: 26px 24px;
-}
-
-.card__title {
-  font-size: 21px;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.card__text { color: var(--muted); }
-
-/* --- примеры работ ------------------------------------------------------- */
-
-.works {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 20px;
-}
-
-.work__frame {
-  background: #232527;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  overflow: hidden;
-  aspect-ratio: 4 / 3;
-}
-
-.work__frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  /* пока файла нет — видно подпись alt на сером фоне, а не пустоту */
-  font-size: 13px;
-  color: var(--muted);
-}
-
-.work__caption {
-  margin-top: 10px;
+.hero .sub {
+  margin-top: 14px;
+  max-width: 42ch;
   color: var(--muted);
   font-size: 15px;
 }
 
+.hero-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.hero-actions .btn { width: 100%; }
+
+/* --- секции -------------------------------------------------------------- */
+
+section { padding: 44px 0; }
+
+.note {
+  margin-top: 12px;
+  max-width: 44ch;
+  color: var(--muted);
+}
+
+/* --- гарантия ------------------------------------------------------------ */
+
+.facts {
+  display: grid;
+  gap: 24px;
+  margin-top: 4px;
+}
+
+.fact-num {
+  font-family: var(--font-head);
+  font-weight: 400;
+  font-size: var(--h2);
+  line-height: 1.2;
+  letter-spacing: -.03em;
+}
+
+.fact-label {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* --- работы -------------------------------------------------------------- */
+
+.gallery {
+  display: grid;
+  gap: 24px;
+  margin-top: 28px;
+}
+
+.shot { margin: 0; }
+
+.shot img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.shot figcaption {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* --- отзывы -------------------------------------------------------------- */
+
+.quotes {
+  display: grid;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+blockquote {
+  margin: 0;
+  padding: 22px;
+  border: 1px dashed var(--line);
+  border-radius: 14px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* --- цены и условия ------------------------------------------------------ */
+
+.terms {
+  margin: 28px 0 0;
+  border-top: 1px solid var(--line);
+}
+
+.term {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.term dt {
+  font-family: var(--font-head);
+  font-weight: 400;
+  font-size: var(--h3);
+  line-height: 1.3;
+  letter-spacing: -.03em;
+}
+
+.term dd {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
 /* --- контакты ------------------------------------------------------------ */
+
+.contact-row {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
 
 .phone {
   display: inline-block;
-  font-size: clamp(30px, 8vw, 48px);
-  font-weight: 800;
-  color: var(--text);
-  text-decoration: none;
-  letter-spacing: -0.02em;
-  margin-bottom: 24px;
+  /* добираем до 44 px по высоте, чтобы попадать пальцем */
+  padding: 8px 0;
+  font-family: var(--font-head);
+  font-weight: 400;
+  font-size: var(--h2);
+  line-height: 1.2;
+  letter-spacing: -.03em;
   /* длинный номер не должен ломать вёрстку на 320 px */
   overflow-wrap: anywhere;
 }
 
 .phone:hover { color: var(--accent); }
 
-.contacts__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-bottom: 40px;
-}
-
-.contacts__actions .btn { flex: 1 1 auto; }
-
-.facts {
-  margin: 0;
-  display: grid;
-  gap: 18px;
-  border-top: 1px solid var(--line);
-  padding-top: 26px;
-}
-
-.fact__key {
-  color: var(--muted);
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  margin-bottom: 4px;
-}
-
-.fact__val {
-  margin: 0;
-  font-size: 18px;
-}
-
 /* --- подвал -------------------------------------------------------------- */
 
-.footer {
-  padding: 28px 0;
+footer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 28px 0 32px;
+  border-top: 1px solid var(--line);
   color: var(--muted);
-  font-size: 15px;
+  font-size: 12px;
 }
 
-.footer__inner {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 20px;
-  justify-content: space-between;
-}
+/* --- что показываем только на широком экране ----------------------------- */
+/* стоит после компонентов, иначе display у .btn перебивает скрытие */
+
+.only-desktop { display: none; }
 
 /* --- десктоп ------------------------------------------------------------- */
 
 @media (min-width: 720px) {
-  .section { padding: 96px 0; }
+  :root {
+    --h1: clamp(34px, 5vw, 52px);
+    --h2: clamp(28px, 3.4vw, 36px);
+    --h3: 20px;
+  }
 
-  .hero__actions,
-  .contacts__actions { gap: 16px; }
+  body { font-size: 16px; }
 
-  .hero__actions .btn,
-  .contacts__actions .btn { flex: 0 0 auto; }
+  h1 { line-height: 1.05; }
+  h2 { line-height: 1.15; }
 
-  .about {
-    grid-template-columns: 380px 1fr;
-    gap: 48px;
+  .only-desktop { display: inline; }
+  p.only-desktop { display: block; }
+  .btn.only-desktop { display: inline-flex; }
+  .only-mobile { display: none; }
+
+  .kicker {
+    font-size: 12px;
+    margin-bottom: 20px;
+  }
+
+  .btn {
+    min-height: 48px;
+    padding: 13px 26px;
+    font-size: 15px;
+  }
+
+  .btn-call { font-size: 15px; min-height: 48px; }
+
+  nav.top { padding: 28px 0; }
+
+  nav.top .wrap {
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .brand { font-size: 15px; }
+
+  .logo {
+    width: 137px;
+    height: 74px;
+    border-radius: 18px;
+    font-size: 28px;
+  }
+
+  .hero { padding: clamp(48px, 9vw, 104px) 0 clamp(72px, 10vw, 120px); }
+
+  /* второй столбец остаётся пустым — он держит ширину колонки с текстом */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+    gap: clamp(32px, 5vw, 64px);
+    align-items: end;
+  }
+
+  .hero h1 { max-width: 18ch; }
+
+  .hero .sub {
+    margin-top: 20px;
+    font-size: 17px;
+  }
+
+  .hero-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 36px;
+  }
+
+  .hero-actions .btn { width: auto; }
+
+  section { padding: clamp(64px, 8vw, 104px) 0; }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 72px);
     align-items: start;
   }
 
-  .cards { grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .note { margin-top: 0; }
 
-  .works { grid-template-columns: repeat(2, 1fr); }
+  .facts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(24px, 4vw, 56px);
+    margin-top: 8px;
+  }
 
-  .facts { grid-template-columns: repeat(2, 1fr); gap: 32px; }
-}
+  .fact-label {
+    margin-top: 10px;
+    max-width: 22ch;
+  }
 
-@media (min-width: 1000px) {
-  .works { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(16px, 2.5vw, 28px);
+    margin-top: 48px;
+  }
+
+  .shot img {
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+  }
+
+  .shot-wide { grid-column: span 2; }
+  .shot-wide img { aspect-ratio: 21 / 9; }
+
+  .shot figcaption {
+    margin-top: 12px;
+    font-size: 14px;
+  }
+
+  .quotes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(20px, 3vw, 32px);
+    margin-top: 48px;
+  }
+
+  blockquote {
+    padding: 32px;
+    border-style: solid;
+    border-radius: 16px;
+    font-size: 15px;
+  }
+
+  .terms { margin-top: 40px; }
+
+  .term {
+    display: grid;
+    grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+    gap: 8px 32px;
+    padding: 24px 0;
+  }
+
+  .term dd {
+    margin: 0;
+    font-size: 16px;
+  }
+
+  #contacts .note { margin-top: 16px; }
+
+  .contact-row {
+    flex-direction: row;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: clamp(20px, 4vw, 44px);
+    margin-top: 32px;
+  }
+
+  footer {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 36px 0 64px;
+    font-size: 13px;
+  }
 }
 
 /* уважаем системную настройку «меньше движения» */
