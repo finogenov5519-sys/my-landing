@@ -196,6 +196,48 @@
       <a class="phone" href="tel:500273826">500 273 826</a>
       <a class="btn only-desktop" href="tel:500273826">Позвонить ↗</a>
     </div>
+
+    <form class="lead-form" id="lead-form" novalidate>
+      <h3 class="lead-form-title">Или оставь заявку</h3>
+      <div class="lead-form-grid">
+        <div class="field">
+          <label for="lf-name">Имя *</label>
+          <input id="lf-name" name="name" type="text" autocomplete="name" maxlength="100" required>
+        </div>
+        <div class="field">
+          <label for="lf-phone">Телефон *</label>
+          <input id="lf-phone" name="phone" type="tel" autocomplete="tel" maxlength="30" required>
+        </div>
+        <div class="field">
+          <label for="lf-email">Email</label>
+          <input id="lf-email" name="email" type="email" autocomplete="email" maxlength="100">
+        </div>
+        <div class="field">
+          <label for="lf-address">Адрес</label>
+          <input id="lf-address" name="address" type="text" autocomplete="street-address" maxlength="200">
+        </div>
+        <div class="field field-wide">
+          <label for="lf-service">Что нужно сделать</label>
+          <select id="lf-service" name="service">
+            <option value="">Не выбрано</option>
+            <option>Ворота</option>
+            <option>Забор</option>
+            <option>Навес</option>
+            <option>Лестница</option>
+            <option>Перила и ограждения</option>
+            <option>Другое</option>
+          </select>
+        </div>
+      </div>
+
+      <label class="consent">
+        <input type="checkbox" name="consent" required>
+        <span>Согласен(на) на обработку указанных данных — чтобы я мог связаться по заявке.</span>
+      </label>
+
+      <button class="btn btn-call lead-form-submit" type="submit">Отправить заявку</button>
+      <p class="lead-form-status" id="lead-form-status" role="status" aria-live="polite"></p>
+    </form>
   </div>
 </section>
 
@@ -205,6 +247,50 @@
     <span>Красноград</span>
   </footer>
 </div>
+
+<script>
+(function () {
+  var API_URL = "https://my-landing-api-production.up.railway.app/api/requests";
+  var form = document.getElementById("lead-form");
+  var statusEl = document.getElementById("lead-form-status");
+  var submitBtn = form.querySelector(".lead-form-submit");
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    var payload = {
+      name: form.name.value.trim(),
+      phone: form.phone.value.trim(),
+      email: form.email.value.trim(),
+      address: form.address.value.trim(),
+      service: form.service.value
+    };
+
+    submitBtn.disabled = true;
+    statusEl.textContent = "Отправляю…";
+
+    fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+      .then(function (response) {
+        if (!response.ok) { throw new Error("bad status"); }
+        return response.json();
+      })
+      .then(function () {
+        statusEl.textContent = "Заявка отправлена. Перезвоню в течение дня.";
+        form.reset();
+      })
+      .catch(function () {
+        statusEl.textContent = "Не получилось отправить. Позвони напрямую: 500 273 826.";
+      })
+      .finally(function () {
+        submitBtn.disabled = false;
+      });
+  });
+})();
+</script>
 
 </body>
 </html>
