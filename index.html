@@ -205,8 +205,8 @@
           <input id="lf-name" name="name" type="text" autocomplete="name" maxlength="100" required>
         </div>
         <div class="field">
-          <label for="lf-phone">Телефон *</label>
-          <input id="lf-phone" name="phone" type="tel" autocomplete="tel" maxlength="30" required>
+          <label for="lf-contact">Телефон или Telegram *</label>
+          <input id="lf-contact" name="contact" type="text" placeholder="+7 999 123-45-67 или @username" maxlength="40" required>
         </div>
         <div class="field">
           <label for="lf-email">Email</label>
@@ -255,19 +255,44 @@
   var statusEl = document.getElementById("lead-form-status");
   var submitBtn = form.querySelector(".lead-form-submit");
 
+  // тот же формат, что и на сервере (src/server.js) — телефон или Telegram-ник
+  var PHONE_RE = /^[+\d][\d\s().-]{6,19}$/;
+  var TELEGRAM_RE = /^@[A-Za-z][A-Za-z0-9_]{4,31}$/;
+
+  function isValidContact(value) {
+    var digits = value.replace(/\D/g, "");
+    var looksLikePhone = PHONE_RE.test(value) && digits.length >= 7 && digits.length <= 15;
+    return looksLikePhone || TELEGRAM_RE.test(value);
+  }
+
   form.addEventListener("submit", function (event) {
     event.preventDefault();
 
     var payload = {
       name: form.name.value.trim(),
-      phone: form.phone.value.trim(),
+      contact: form.contact.value.trim(),
       email: form.email.value.trim(),
       address: form.address.value.trim(),
       service: form.service.value
     };
 
+    if (!payload.name) {
+      statusEl.textContent = "Укажи имя.";
+      return;
+    }
+    if (!payload.contact) {
+      statusEl.textContent = "Укажи телефон или Telegram.";
+      return;
+    }
+    if (!isValidContact(payload.contact)) {
+      statusEl.textContent = "Телефон или Telegram выглядят некорректно — например: +79991234567 или @username.";
+      return;
+    }
+
     submitBtn.disabled = true;
     statusEl.textContent = "Отправляю…";
+
+    var FALLBACK_ERROR = "Не получилось отправить. Позвони напрямую: 500 273 826.";
 
     fetch(API_URL, {
       method: "POST",
@@ -275,15 +300,25 @@
       body: JSON.stringify(payload)
     })
       .then(function (response) {
-        if (!response.ok) { throw new Error("bad status"); }
-        return response.json();
+        return response
+          .json()
+          .catch(function () { return {}; })
+          .then(function (data) {
+            if (!response.ok) {
+              var serverErr = new Error(data.error || FALLBACK_ERROR);
+              serverErr.isServerMessage = true;
+              throw serverErr;
+            }
+            return data;
+          });
       })
       .then(function () {
         statusEl.textContent = "Заявка отправлена. Перезвоню в течение дня.";
         form.reset();
       })
-      .catch(function () {
-        statusEl.textContent = "Не получилось отправить. Позвони напрямую: 500 273 826.";
+      .catch(function (err) {
+        // сетевой сбой (не ответ сервера) — своё сообщение браузера сюда не пускаем
+        statusEl.textContent = err.isServerMessage ? err.message : FALLBACK_ERROR;
       })
       .finally(function () {
         submitBtn.disabled = false;
